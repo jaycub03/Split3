@@ -6,7 +6,7 @@ var config = {
     physics: {
         default: 'arcade',
         arcade: {
-            gravity: { y: 300 },
+            gravity: { y: 15000 },
             debug: false
         }
     },
@@ -25,12 +25,12 @@ var game = new Phaser.Game(config);
 
 function preload () {
     // Load the player sprite here
-    this.load.image('player', '../Assets/player.jpg');
+    this.load.image('player', '../Assets/player_right.jpg');
 
     
 }
 
-function create () {
+function create() {
     // Create the player sprite
     player = this.physics.add.sprite(400, 300, 'player');
 
@@ -40,21 +40,40 @@ function create () {
 
     // Input Events
     cursors = this.input.keyboard.createCursorKeys();
+    cursors.a = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A); 
+    cursors.d = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D); 
+    cursors.s = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);  // Adding the W key
 }
-
-function update () {
+function update() {
     // Reset player velocity (movement)
     player.setVelocityX(0);
+    player.setVelocityY(0);  // Ensure vertical velocity is also reset each frame
+
+    // Check for spacebar press
+    var spacePressed = this.input.keyboard.checkDown(cursors.space, 250);
 
     // Horizontal movement
-    if (cursors.left.isDown) {
-        player.setVelocityX(-160);
-    } else if (cursors.right.isDown) {
-        player.setVelocityX(160);
+    if ((cursors.left.isDown || cursors.a.isDown) && spacePressed) {
+        player.setVelocityX(600);
+        player.setVelocityY(-1000);  // Move left when left arrow and space are pressed
+        player.scaleX = -1;         // Mirror the sprite when moving left
+    } else if ((cursors.right.isDown || cursors.d.isDown) && spacePressed) {
+        player.setVelocityX(-600); 
+        player.setVelocityY(-1000);  // Move right when right arrow and space are pressed
+        player.scaleX = 1;          // Ensure the sprite faces right when moving right
+    } else {
+        // Set sprite direction without moving
+        if (cursors.left.isDown || cursors.a.isDown) {
+            player.scaleX = -1;     // Face left without moving
+        } else if (cursors.right.isDown || cursors.d.isDown) {
+            player.scaleX = 1;      // Face right without moving
+        }
     }
 
-    // Vertical movement (jump)
-    if (cursors.up.isDown && player.body.touching.down) {
-        player.setVelocityY(-330);
+    // Vertical movement
+    if ((cursors.up.isDown || cursors.s.isDown) && spacePressed) {
+        player.setVelocityY(-3000); // Move up when up arrow/W and space are pressed together
     }
 }
+
+
