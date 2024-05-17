@@ -1,7 +1,7 @@
 var config = {
     type: Phaser.AUTO,
-    width: 900,
-    height: 700,
+    width: 912,
+    height: 720,
     physics: {
         default: 'arcade',
         arcade: {
@@ -34,8 +34,8 @@ function create() {
     //const platformLayer = map.createLayer("platforms", tileset, -100, -4965);
     //platformLayer.setCollisionByExclusion(-1, true);
 
-    const spawnX = 600;
-    const spawnY = map.heightInPixels - 76;
+    const spawnX = 300;
+    const spawnY = 500;
 
     player = this.physics.add.sprite(spawnX, spawnY, 'player');
     player.setOrigin(0.5, 0.5);
