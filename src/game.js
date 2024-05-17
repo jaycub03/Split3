@@ -38,26 +38,28 @@ function preload () {
    
 }
 
-
 function create() {
-
     // Add tilemap and tileset
     const map = this.make.tilemap({ key: "map"});
     const tileset = map.addTilesetImage("Prison_A5", "tiles");
 
     // Add map layers
-    const backgroundLayer = map.createLayer("background", tileset, 0, -4965);
-    const platformLayer = map.createLayer("platforms", tileset, 0, -4965);
-    platformLayer.setCollisionByExclusion(-1, true);
 
-    
+    //floor
+    const backgroundLayer = map.createLayer("background", tileset, 90, -4965);
+    const platformLayer = map.createLayer("platforms", tileset, 90, -4965);
+    platformLayer.setCollisionByExclusion(-1, true);
+//-4965
     // Player spawn location
-    const spawnX = 300;
-    const spawnY = map.heightInPixels - 76; 
+    const spawnX = 600;
+    const spawnY = map.heightInPixels - 76;
 
     // Create the player sprite at the calculated spawn position
     player = this.physics.add.sprite(spawnX, spawnY, 'player');
-    
+
+    // Set origin to the center of the sprite
+    player.setOrigin(0.5, 0.5);
+
     // Player physics properties
     player.setBounce(0.2);
     player.setCollideWorldBounds(true);
@@ -65,11 +67,10 @@ function create() {
     // Set up camera
     this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
     this.cameras.main.startFollow(player);
-    
+
     // Create collision between player and platforms
     this.physics.add.collider(player, platformLayer);
     platformLayer.setCollisionByProperty({collides: true});
-
 
     // Input Events
     cursors = this.input.keyboard.createCursorKeys();
@@ -79,42 +80,40 @@ function create() {
 }
 
 function update() {
-
     // Reset player velocity (movement)
     player.setVelocityX(0);
     player.setVelocityY(0);  // Ensure vertical velocity is also reset each frame
 
-
     // Check for spacebar press
     var spacePressed = this.input.keyboard.checkDown(cursors.space, 250);
 
-
     // Horizontal movement
     if ((cursors.left.isDown || cursors.a.isDown) && spacePressed) {
-   
-        player.setVelocityX(1600);
-        player.setVelocityY(-11000);  // Move left when left arrow and space are pressed
+        player.setVelocityX(1100);
+        player.setVelocityY(-1000);  // Move left when left arrow and space are pressed
         player.scaleX = -1;         // Mirror the sprite when moving left
+        player.body.setOffset(player.width, 0); // Adjust hitbox position
     } else if ((cursors.right.isDown || cursors.d.isDown) && spacePressed) {
-        player.setVelocityX(-1600);
-        player.setVelocityY(-11000);  // Move right when right arrow and space are pressed
+        player.setVelocityX(-1100);
+        player.setVelocityY(-1000);  // Move right when right arrow and space are pressed
         player.scaleX = 1;          // Ensure the sprite faces right when moving right
+        player.body.setOffset(0, 0); // Adjust hitbox position
     } else {
         // Set sprite direction without moving
         if (cursors.left.isDown || cursors.a.isDown) {
             player.scaleX = -1;     // Face left without moving
+            player.body.setOffset(player.width, 0); // Adjust hitbox position
         } else if (cursors.right.isDown || cursors.d.isDown) {
             player.scaleX = 1;      // Face right without moving
+            player.body.setOffset(0, 0); // Adjust hitbox position
         }
     }
 
-
     // Vertical movement
     if ((cursors.up.isDown || cursors.s.isDown) && spacePressed) {
-        player.setVelocityY(-3000); // Move up when up arrow/W and space are pressed together
+        player.setVelocityY(-6000); // Move up when up arrow/W and space are pressed together
     }
 }
-
 
 
 
