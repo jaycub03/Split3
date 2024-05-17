@@ -27,9 +27,16 @@ function preload () {
     this.load.image('player', '../Assets/player_right.png');
     // Load the block sprite
     this.load.image('block', '../Assets/block.png');
+    this.load.image("tiles", "../Assets/Prison_A5.png");
+    this.load.tilemapTiledJSON("map", "../Assets/tilemap.json");
+
 }
 
 function create() {
+    const map = this.make.tilemap({ key: "map"});
+    const tileset = map.addTilesetImage("Prison_A5", "tiles");
+    const collision = map.createLayer("layer1", tileset, 0, -5280);
+
     // Create the player sprite
     player = this.physics.add.sprite(400, 300, 'player');
 
