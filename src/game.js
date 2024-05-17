@@ -40,19 +40,20 @@ function preload () {
 
 
 function create() {
-    // Add tilemap
+
+    // Add tilemap and tileset
     const map = this.make.tilemap({ key: "map"});
     const tileset = map.addTilesetImage("Prison_A5", "tiles");
 
+    // Add map layers
     const backgroundLayer = map.createLayer("background", tileset, 0, -4965);
-
     const platformLayer = map.createLayer("platforms", tileset, 0, -4965);
     platformLayer.setCollisionByExclusion(-1, true);
 
     
-    // Calculate the spawn position for the player
-    const spawnX = 400; // Example x-coordinate
-    const spawnY = map.heightInPixels - 48 - 28; // Adjust as needed
+    // Player spawn location
+    const spawnX = 300;
+    const spawnY = map.heightInPixels - 76; 
 
     // Create the player sprite at the calculated spawn position
     player = this.physics.add.sprite(spawnX, spawnY, 'player');
@@ -65,6 +66,7 @@ function create() {
     this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
     this.cameras.main.startFollow(player);
     
+    // Create collision between player and platforms
     this.physics.add.collider(player, platformLayer);
     platformLayer.setCollisionByProperty({collides: true});
 
@@ -77,6 +79,7 @@ function create() {
 }
 
 function update() {
+
     // Reset player velocity (movement)
     player.setVelocityX(0);
     player.setVelocityY(0);  // Ensure vertical velocity is also reset each frame
