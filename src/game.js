@@ -30,7 +30,7 @@ var game = new Phaser.Game(config);
 
 function preload () {
     // Load the player sprite here
-    this.load.image('player', '../Assets/player_right.jpg');
+    this.load.image('player', '../Assets/player_right.png');
     this.load.image("tiles", "../Assets/Prison_A5.png");
     this.load.tilemapTiledJSON("map", "../Assets/tilemap.json");
 
@@ -40,22 +40,33 @@ function preload () {
 
 
 function create() {
-    //add tilemap
+    // Add tilemap
     const map = this.make.tilemap({ key: "map"});
     const tileset = map.addTilesetImage("Prison_A5", "tiles");
-    const collision = map.createLayer("platforms", tileset, 0, -65);
-    collision.setCollisionByExclusion(-1, true);
 
+    const backgroundLayer = map.createLayer("background", tileset, 0, -4965);
 
+    const platformLayer = map.createLayer("platforms", tileset, 0, -4965);
+    platformLayer.setCollisionByExclusion(-1, true);
 
+    
+    // Calculate the spawn position for the player
+    const spawnX = 400; // Example x-coordinate
+    const spawnY = map.heightInPixels - 48 - 28; // Adjust as needed
 
-    // Create the player sprite
-    player = this.physics.add.sprite(400, 300, 'player');
-
-
+    // Create the player sprite at the calculated spawn position
+    player = this.physics.add.sprite(spawnX, spawnY, 'player');
+    
     // Player physics properties
     player.setBounce(0.2);
     player.setCollideWorldBounds(true);
+
+    // Set up camera
+    this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+    this.cameras.main.startFollow(player);
+    
+    this.physics.add.collider(player, platformLayer);
+    platformLayer.setCollisionByProperty({collides: true});
 
 
     // Input Events
@@ -64,6 +75,7 @@ function create() {
     cursors.d = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
     cursors.s = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);  // Adding the W key
 }
+
 function update() {
     // Reset player velocity (movement)
     player.setVelocityX(0);
