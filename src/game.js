@@ -1,12 +1,12 @@
 var config = {
     type: Phaser.AUTO,
-    width: 912,
-    height: 720,
+    width: 900,
+    height: 700,
     physics: {
         default: 'arcade',
         arcade: {
             gravity: { y: 15000 },
-            debug: true
+            debug: true // Enable debug to visualize collision boundaries
         }
     },
     scene: {
@@ -18,69 +18,72 @@ var config = {
 
 var player;
 var cursors;
+var block;
+
 var game = new Phaser.Game(config);
 
 function preload () {
+    // Load the player sprite here
     this.load.image('player', '../Assets/player_right.png');
-    this.load.image("tiles", "../Assets/Prison_A5.png");
-    this.load.tilemapTiledJSON("map", "../Assets/tilemap.json");
+    // Load the block sprite
+    this.load.image('block', '../Assets/block.png');
 }
 
 function create() {
-    const map = this.make.tilemap({ key: "map"});
-    const tileset = map.addTilesetImage("Prison_A5", "tiles");
+    // Create the player sprite
+    player = this.physics.add.sprite(400, 300, 'player');
 
-    const backgroundLayer = map.createLayer("layer1", tileset, 0, 0);
-    //const platformLayer = map.createLayer("platforms", tileset, -100, -4965);
-    //platformLayer.setCollisionByExclusion(-1, true);
+    // Create the block sprite and scale it down
+    block = this.physics.add.staticSprite(500, 500, 'block');
+    block.setScale(0.1); // Adjust the scale factor as needed
+    block.refreshBody(); // Refresh the body to apply the scale
 
-    const spawnX = 300;
-    const spawnY = 500;
-
-    player = this.physics.add.sprite(spawnX, spawnY, 'player');
-    player.setOrigin(0.5, 0.5);
+    // Player physics properties
     player.setBounce(0.2);
     player.setCollideWorldBounds(true);
 
-    this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
-    this.cameras.main.startFollow(player, true, 0.1, 0.1);  // Adjusted to follow player both horizontally and vertically
+    // Set up collision between player and block
+    this.physics.add.collider(player, block);
 
-    this.physics.add.collider(player, backgroundLayer);
-    backgroundLayer.setCollisionByProperty({collides: true});
-
+    // Input Events
     cursors = this.input.keyboard.createCursorKeys();
-    cursors.a = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
-    cursors.d = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
-    cursors.s = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+    cursors.a = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A); 
+    cursors.d = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D); 
+    cursors.s = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);  // Adding the S key
 }
 
 function update() {
+    // Reset player velocity (movement)
     player.setVelocityX(0);
-    player.setVelocityY(0);
+    player.setVelocityY(0);  // Ensure vertical velocity is also reset each frame
 
+    // Check for spacebar press
     var spacePressed = this.input.keyboard.checkDown(cursors.space, 250);
 
+    // Horizontal movement
     if ((cursors.left.isDown || cursors.a.isDown) && spacePressed) {
-        player.setVelocityX(1100);
-        player.setVelocityY(-1000);
-        player.scaleX = -1;
+        player.setVelocityX(-600);
+        player.setVelocityY(-1000);  // Move left when left arrow and space are pressed
+        player.scaleX = -1;         // Mirror the sprite when moving left
         player.body.setOffset(player.width, 0);
     } else if ((cursors.right.isDown || cursors.d.isDown) && spacePressed) {
-        player.setVelocityX(-1100);
-        player.setVelocityY(-1000);
-        player.scaleX = 1;
+        player.setVelocityX(600); 
+        player.setVelocityY(-1000);  // Move right when right arrow and space are pressed
+        player.scaleX = 1;          // Ensure the sprite faces right when moving right
         player.body.setOffset(0, 0);
     } else {
+        // Set sprite direction without moving
         if (cursors.left.isDown || cursors.a.isDown) {
-            player.scaleX = -1;
+            player.scaleX = -1;     // Face left without moving
             player.body.setOffset(player.width, 0);
         } else if (cursors.right.isDown || cursors.d.isDown) {
-            player.scaleX = 1;
+            player.scaleX = 1;      // Face right without moving
             player.body.setOffset(0, 0);
         }
     }
 
+    // Vertical movement
     if ((cursors.up.isDown || cursors.s.isDown) && spacePressed) {
-        player.setVelocityY(-6000);
+        player.setVelocityY(-3000); // Move up when up arrow/S and space are pressed together
     }
 }
