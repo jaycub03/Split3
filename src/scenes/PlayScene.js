@@ -19,7 +19,10 @@ class PlayScene extends Phaser.Scene {
         // Create the tilemap and tileset
         const map = this.make.tilemap({ key: "map" });
         const tileset = map.addTilesetImage("Prison_A5", "tiles");
-        const collision = map.createLayer("layer1", tileset, 0, -5280);
+        const collisionLayer = map.createLayer("layer1", tileset, 0, 0);
+
+        // Enable collisions for the collision layer
+        collisionLayer.setCollisionByProperty({ collides: true });
 
         // Create the player sprite
         this.player = this.physics.add.sprite(400, 300, 'player');
@@ -36,18 +39,36 @@ class PlayScene extends Phaser.Scene {
         // Set up collision between player and block
         this.physics.add.collider(this.player, this.block);
 
+        // Set up collision between player and the collision layer
+        this.physics.add.collider(this.player, collisionLayer);
+
         // Input Events
         this.cursors = this.input.keyboard.createCursorKeys();
         this.cursors.a = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A); 
         this.cursors.d = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D); 
         this.cursors.s = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);  // Adding the S key
         this.cursors.space = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);  // Add space key
+
+        // Camera setup
+        this.cameras.main.startFollow(this.player);
+        this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+
+        // Set world bounds
+        this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+
+        // Debugging collision boxes (optional)
+        const debugGraphics = this.add.graphics().setAlpha(0.75);
+        collisionLayer.renderDebug(debugGraphics, {
+            tileColor: null, // Color of non-colliding tiles
+            collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
+            faceColor: new Phaser.Display.Color(40, 39, 37, 255) // Color of colliding face edges
+        });
     }
 
     update() {
         // Reset player velocity (movement)
         this.player.setVelocityX(0);
-        this.player.setVelocityY(0);  // Ensure vertical velocity is also reset each frame
+        // Note: Keeping player.setVelocityY(0) commented out to ensure gravity or other forces can affect vertical movement
 
         // Check for spacebar press
         var spacePressed = this.cursors.space.isDown;
@@ -77,6 +98,8 @@ class PlayScene extends Phaser.Scene {
         // Vertical movement
         if ((this.cursors.up.isDown || this.cursors.s.isDown) && spacePressed) {
             this.player.setVelocityY(-3000); // Move up when up arrow/S and space are pressed together
+        } else if (this.cursors.down.isDown) {
+            this.player.setVelocityY(300); // Move down when down arrow is pressed
         }
     }
 }
