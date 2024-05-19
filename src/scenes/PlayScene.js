@@ -19,7 +19,7 @@ class PlayScene extends Phaser.Scene {
         // Create the tilemap and tileset
         const map = this.make.tilemap({ key: "map" });
         const tileset = map.addTilesetImage("Prison_A5", "tiles");
-        const collisionLayer = map.createLayer("layer1", tileset, 0, 0);
+        const collisionLayer = map.createLayer("layer1", tileset, 0, -5280);
 
         // Enable collisions for the collision layer
         collisionLayer.setCollisionByProperty({ collides: true });
@@ -51,10 +51,12 @@ class PlayScene extends Phaser.Scene {
 
         // Camera setup
         this.cameras.main.startFollow(this.player);
-        this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
 
-        // Set world bounds
-        this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+        // Adjust camera bounds to include the offset position of the tilemap layer
+        this.cameras.main.setBounds(0, -5280, map.widthInPixels, map.heightInPixels + 5280);
+
+        // Set world bounds to include the offset position of the tilemap layer
+        this.physics.world.setBounds(0, -5280, map.widthInPixels, map.heightInPixels + 5280);
 
         // Debugging collision boxes (optional)
         const debugGraphics = this.add.graphics().setAlpha(0.75);
@@ -68,8 +70,7 @@ class PlayScene extends Phaser.Scene {
     update() {
         // Reset player velocity (movement)
         this.player.setVelocityX(0);
-        // Note: Keeping player.setVelocityY(0) commented out to ensure gravity or other forces can affect vertical movement
-
+        
         // Check for spacebar press
         var spacePressed = this.cursors.space.isDown;
 
