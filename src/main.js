@@ -9,7 +9,7 @@ var config =
         default: 'arcade',
         arcade: 
         {
-            gravity: { y: 15000 },
+            gravity: { y: 5000 },
             debug: true // Enable debug to visualize collision boundaries
         }
     },

@@ -76,13 +76,13 @@ class PlayScene extends Phaser.Scene {
 
         // Horizontal movement
         if ((this.cursors.left.isDown || this.cursors.a.isDown) && spacePressed) {
-            this.player.setVelocityX(-600);
-            this.player.setVelocityY(-1000);  // Move left when left arrow and space are pressed
+            this.player.setVelocityX(600);
+            this.player.setVelocityY(1000);  // Move left when left arrow and space are pressed
             this.player.scaleX = -1;         // Mirror the sprite when moving left
             this.player.body.setOffset(this.player.width, 0);
         } else if ((this.cursors.right.isDown || this.cursors.d.isDown) && spacePressed) {
-            this.player.setVelocityX(600); 
-            this.player.setVelocityY(-1000);  // Move right when right arrow and space are pressed
+            this.player.setVelocityX(-600); 
+            this.player.setVelocityY(1000);  // Move right when right arrow and space are pressed
             this.player.scaleX = 1;          // Ensure the sprite faces right when moving right
             this.player.body.setOffset(0, 0);
         } else {
@@ -98,7 +98,7 @@ class PlayScene extends Phaser.Scene {
 
         // Vertical movement
         if ((this.cursors.up.isDown || this.cursors.s.isDown) && spacePressed) {
-            this.player.setVelocityY(-3000); // Move up when up arrow/S and space are pressed together
+            this.player.setVelocityY(-1000); // Move up when up arrow/S and space are pressed together
         } else if (this.cursors.down.isDown) {
             this.player.setVelocityY(300); // Move down when down arrow is pressed
         }
