@@ -26,18 +26,53 @@ class PlayScene extends Phaser.Scene {
 
         // Create the player sprite
         this.player = this.physics.add.sprite(400, 300, 'player');
+        // Adjust the player's hitbox size and offset
+    this.player.body.setSize(100, 200); // Set the size (width, height) of the hitbox
+    this.player.body.setOffset(10, 10); // Set the offset (x, y) of the hitbox
 
-        // Create the block sprite and scale it down
-        this.block = this.physics.add.staticSprite(500, 500, 'block');
-        this.block.setScale(0.1); // Adjust the scale factor as needed
-        this.block.refreshBody(); // Refresh the body to apply the scale
+        // Create the first block sprite and scale it down to have a width of 100
+        this.block = this.physics.add.staticSprite(500, 670, 'block');
+        this.block.displayWidth = 1000;
+        this.block.scaleY = 0.05; // Adjust the scale factor to maintain height
+        this.block.refreshBody();
+        this.physics.add.collider(this.player, this.block);
+
+        // Create the second block sprite and make it wider than the first block
+        this.block2 = this.physics.add.staticSprite(40, 190, 'block');
+        this.block2.displayWidth = 400; // Wider than the first block
+        this.block2.scaleY = 0.054
+        this.block2.refreshBody();
+        this.physics.add.collider(this.player, this.block2);
+
+
+        this.block3 = this.physics.add.staticSprite(690, 610, 'block');
+        this.block3.displayWidth = 600; // Wider than the first block
+        this.block3.scaleY = 0.2 // Maintain the same height
+        this.block3.refreshBody();
+        this.physics.add.collider(this.player, this.block3);
+
+        this.block4 = this.physics.add.staticSprite(-105, -100, 'block');
+        this.block4.displayWidth = 400; // Wider than the first block
+        this.block4.scaleY = 0.054;
+        this.block4.refreshBody();
+        this.physics.add.collider(this.player, this.block4);
+
+
+
+        this.block5 = this.physics.add.staticSprite(590, -340, 'block');
+this.block5.displayWidth = 700; // Wider than the first block
+this.block5.scaleY = 0.11;
+this.block5.refreshBody();
+this.physics.add.collider(this.player, this.block5);
+
+
+
+
 
         // Player physics properties
         this.player.setBounce(0.2);
         this.player.setCollideWorldBounds(true);
 
-        // Set up collision between player and block
-        this.physics.add.collider(this.player, this.block);
 
         // Set up collision between player and the collision layer
         this.physics.add.collider(this.player, collisionLayer);
@@ -79,7 +114,6 @@ class PlayScene extends Phaser.Scene {
             this.player.setVelocityX(600);
             this.player.setVelocityY(1000);  // Move left when left arrow and space are pressed
             this.player.scaleX = -1;         // Mirror the sprite when moving left
-            this.player.body.setOffset(this.player.width, 0);
         } else if ((this.cursors.right.isDown || this.cursors.d.isDown) && spacePressed) {
             this.player.setVelocityX(-600); 
             this.player.setVelocityY(1000);  // Move right when right arrow and space are pressed
@@ -89,7 +123,7 @@ class PlayScene extends Phaser.Scene {
             // Set sprite direction without moving
             if (this.cursors.left.isDown || this.cursors.a.isDown) {
                 this.player.scaleX = -1;     // Face left without moving
-                this.player.body.setOffset(this.player.width, 0);
+                this.player.body.setOffset(100, 0);
             } else if (this.cursors.right.isDown || this.cursors.d.isDown) {
                 this.player.scaleX = 1;      // Face right without moving
                 this.player.body.setOffset(0, 0);
