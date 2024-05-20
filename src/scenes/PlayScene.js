@@ -9,10 +9,14 @@ class PlayScene extends Phaser.Scene {
     preload() {
         // Load the player sprite here
         this.load.image('player', '../Assets/player_right.png');
+        this.load.image('player2', '../Assets/player_left.png');
         // Load the block sprite
         this.load.image('block', '../Assets/block.png');
         this.load.image("tiles", "../Assets/Prison_A5.png");
         this.load.tilemapTiledJSON("map", "../Assets/tilemap.json");
+
+        
+
     }
 
     create() {
@@ -27,8 +31,8 @@ class PlayScene extends Phaser.Scene {
         // Create the player sprite
         this.player = this.physics.add.sprite(400, 300, 'player');
         // Adjust the player's hitbox size and offset
-    this.player.body.setSize(100, 200); // Set the size (width, height) of the hitbox
-    this.player.body.setOffset(10, 10); // Set the offset (x, y) of the hitbox
+    this.player.body.setSize(120, 200); // Set the size (width, height) of the hitbox
+    this.player.body.setOffset(25, 10); // Set the offset (x, y) of the hitbox
 
         // Create the first block sprite and scale it down to have a width of 100
         this.block = this.physics.add.staticSprite(500, 670, 'block');
@@ -64,6 +68,33 @@ this.block5.displayWidth = 700; // Wider than the first block
 this.block5.scaleY = 0.11;
 this.block5.refreshBody();
 this.physics.add.collider(this.player, this.block5);
+
+
+this.block6 = this.physics.add.staticSprite(1120, -910, 'block');
+this.block6.displayWidth = 700; // Wider than the first block
+this.block6.scaleY = 0.109;
+this.block6.refreshBody();
+this.physics.add.collider(this.player, this.block6);
+
+
+
+this.block6 = this.physics.add.staticSprite(130, -910, 'block');
+this.block6.displayWidth = 900; // Wider than the first block
+this.block6.scaleY = 0.109;
+this.block6.refreshBody();
+this.physics.add.collider(this.player, this.block6);
+
+
+this.block7 = this.physics.add.staticSprite(180, -1950, 'block');
+this.block7.displayWidth = 900; // Wider than the first block
+this.block7.scaleY = 0.09;
+this.block7.refreshBody();
+this.physics.add.collider(this.player, this.block7);
+
+
+
+
+
 
 
 
@@ -105,7 +136,7 @@ this.physics.add.collider(this.player, this.block5);
     update() {
         // Reset player velocity (movement)
         this.player.setVelocityX(0);
-        
+
         // Check for spacebar press
         var spacePressed = this.cursors.space.isDown;
 
@@ -113,20 +144,31 @@ this.physics.add.collider(this.player, this.block5);
         if ((this.cursors.left.isDown || this.cursors.a.isDown) && spacePressed) {
             this.player.setVelocityX(600);
             this.player.setVelocityY(1000);  // Move left when left arrow and space are pressed
-            this.player.scaleX = -1;         // Mirror the sprite when moving left
+
+            if (!this.facingLeft) {
+                this.player.setTexture('player2'); // Change to block sprite
+                this.facingLeft = true;
+            }
         } else if ((this.cursors.right.isDown || this.cursors.d.isDown) && spacePressed) {
-            this.player.setVelocityX(-600); 
+            this.player.setVelocityX(-600);
             this.player.setVelocityY(1000);  // Move right when right arrow and space are pressed
-            this.player.scaleX = 1;          // Ensure the sprite faces right when moving right
-            this.player.body.setOffset(0, 0);
+
+            if (this.facingLeft) {
+                this.player.setTexture('player'); // Change back to player sprite
+                this.facingLeft = false;
+            }
         } else {
             // Set sprite direction without moving
             if (this.cursors.left.isDown || this.cursors.a.isDown) {
-                this.player.scaleX = -1;     // Face left without moving
-                this.player.body.setOffset(100, 0);
+                if (!this.facingLeft) {
+                    this.player.setTexture('player2'); // Change to block sprite
+                    this.facingLeft = true;
+                }
             } else if (this.cursors.right.isDown || this.cursors.d.isDown) {
-                this.player.scaleX = 1;      // Face right without moving
-                this.player.body.setOffset(0, 0);
+                if (this.facingLeft) {
+                    this.player.setTexture('player'); // Change back to player sprite
+                    this.facingLeft = false;
+                }
             }
         }
 
