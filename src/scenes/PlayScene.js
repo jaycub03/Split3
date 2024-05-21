@@ -99,6 +99,10 @@ class PlayScene extends Phaser.Scene {
             callbackScope: this,
             loop: true
         });
+
+        // Add collision detection between player and bullets
+        this.physics.add.collider(this.player, this.bulletsRight, this.handlePlayerHit, null, this);
+        this.physics.add.collider(this.player, this.bulletsLeft, this.handlePlayerHit, null, this);
     }
 
     update() {
@@ -262,5 +266,13 @@ class PlayScene extends Phaser.Scene {
                 }
             }
         });
+    }
+
+    handlePlayerHit(player, bullet) {
+        // Display pop-up message
+        alert("You've been shot, try again in another lifetime");
+
+        // Restart the game
+        this.scene.restart();
     }
 }
