@@ -205,7 +205,6 @@ class PlayScene extends Phaser.Scene {
     addPolice() {
         this.rightPolice = this.add.group();
         let rightPCoords = [
-            { x: 200, y: -1150},
             { x: 50, y: -2175 },
             { x: 50, y: -2800 },
             { x: 50, y: -3225 },
