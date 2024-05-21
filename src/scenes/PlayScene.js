@@ -6,7 +6,6 @@ class PlayScene extends Phaser.Scene {
         this.block;
         this.bulletsRight;
         this.bulletsLeft;
-        this.winBlock;
     }
 
     preload() {
@@ -49,12 +48,6 @@ class PlayScene extends Phaser.Scene {
 
         // Create block sprites
         this.createBlocks();
-
-        // Create the win block
-        this.winBlock = this.physics.add.staticSprite(800, -4990, 'block');
-        this.winBlock.displayWidth = 60;
-        this.winBlock.scaleY = 0.28;
-        this.winBlock.refreshBody();
 
         // Player physics properties
         this.player.setBounce(0.2);
@@ -115,15 +108,17 @@ class PlayScene extends Phaser.Scene {
         this.physics.add.collider(this.player, this.bulletsRight, this.handlePlayerHit, null, this);
         this.physics.add.collider(this.player, this.bulletsLeft, this.handlePlayerHit, null, this);
 
-        // Add collision detection between player and win block
-        this.physics.add.collider(this.player, this.winBlock, this.handlePlayerWin, null, this);
-
         // Add player gunshot audio
         this.playerGunshot = this.sound.add("loweredGunshot");
         this.playerGunshot.setVolume(0.5);
     }
 
     update() {
+        // Check win condition
+        if (this.player.x > 800 && this.player.y < -4990) {
+            this.handlePlayerWin();
+        }
+
         // Reset player velocity (movement)
         this.player.setVelocityX(0);
 
@@ -134,7 +129,7 @@ class PlayScene extends Phaser.Scene {
         if ((this.cursors.left.isDown || this.cursors.a.isDown) && spacePressed) {
             this.player.setVelocityX(600);
             this.player.setVelocityY(1000);  // Move left when left arrow and space are presseds
-            this.player.setTexture('shootleft');
+            this.player.setTexture('shootleft'); 
 
             if (!this.facingLeft) {
                 this.facingLeft = true;
@@ -142,7 +137,7 @@ class PlayScene extends Phaser.Scene {
         } else if ((this.cursors.right.isDown || this.cursors.d.isDown) && spacePressed) {
             this.player.setVelocityX(-600);
             this.player.setVelocityY(1000);  // Move right when right arrow and space are pressed
-            this.player.setTexture('shootright');
+            this.player.setTexture('shootright'); 
 
             if (this.facingLeft) {
                 this.facingLeft = false;
@@ -165,7 +160,7 @@ class PlayScene extends Phaser.Scene {
         // Vertical movement
         if ((this.cursors.up.isDown || this.cursors.s.isDown) && spacePressed) {
             this.player.setVelocityY(-1000); // Move up when up arrow/S and space are pressed together
-            this.player.setTexture('shootingDown');
+            this.player.setTexture('shootingDown'); 
         } else if (this.cursors.down.isDown) {
             this.player.setVelocityY(300); // Move down when down arrow is pressed
         }
@@ -210,7 +205,6 @@ class PlayScene extends Phaser.Scene {
             { x: 940, y: -4830, width: 800, height: 0.028 },
             { x: 990, y: -4880, width: 800, height: 0.028 },
             { x: 1040, y: -4930, width: 800, height: 0.028 },
-            { x: 800, y: -4990, width: 60, height: 0.028 },
             { x: 600, y: -4525, width: 800, height: 0.088 },
             { x: 730, y: -1380, width: 800, height: 0.109 },
             { x: 50, y: -1150, width: 200, height: 0.209 },
@@ -267,7 +261,7 @@ class PlayScene extends Phaser.Scene {
                     bullet.setVisible(true);
                     bullet.body.allowGravity = false;
                     bullet.body.velocity.x = 300;
-                    bullet.update = function() {
+                    bullet.update = function () {
                         if (this.x > 1000) this.setActive(false).setVisible(false);
                     };
                 }
@@ -282,7 +276,7 @@ class PlayScene extends Phaser.Scene {
                     bullet.setVisible(true);
                     bullet.body.allowGravity = false;
                     bullet.body.velocity.x = -300;
-                    bullet.update = function() {
+                    bullet.update = function () {
                         if (this.x < 0) this.setActive(false).setVisible(false);
                     };
                 }
@@ -298,11 +292,11 @@ class PlayScene extends Phaser.Scene {
         //this.scene.restart();
     }
 
-    handlePlayerWin(player, winBlock) {
+    handlePlayerWin() {
         // Display pop-up message
         alert("Congrats, you won the game");
 
-        // Restart the game
-        this.scene.restart();
+        // Transition to GameOverScene
+        this.scene.start("GameOverScene");
     }
 }
