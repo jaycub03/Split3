@@ -10,6 +10,9 @@ class PlayScene extends Phaser.Scene {
         // Load the player sprite here
         this.load.image('player', '../Assets/player_right.png');
         this.load.image('player2', '../Assets/player_left.png');
+        this.load.image('shootingLeft', '../Assets/GuyLShoot.png');
+        this.load.image('shootingRight', '../Assets/GuyRShoot.png');
+        this.load.image('shootingDown', '../Assets/GuyDShoot.png');
         // Load the block sprite
         this.load.image('block', '../Assets/block.png');
         this.load.image("tiles", "../Assets/Prison_A5.png");
@@ -143,7 +146,8 @@ this.physics.add.collider(this.player, this.block7);
         // Horizontal movement
         if ((this.cursors.left.isDown || this.cursors.a.isDown) && spacePressed) {
             this.player.setVelocityX(600);
-            this.player.setVelocityY(1000);  // Move left when left arrow and space are pressed
+            this.player.setVelocityY(1000);  // Move left when left arrow and space are presseds
+           // this.player.setTexture('shootingLeft');
 
             if (!this.facingLeft) {
                 this.player.setTexture('player2'); // Change to block sprite
@@ -152,6 +156,8 @@ this.physics.add.collider(this.player, this.block7);
         } else if ((this.cursors.right.isDown || this.cursors.d.isDown) && spacePressed) {
             this.player.setVelocityX(-600);
             this.player.setVelocityY(1000);  // Move right when right arrow and space are pressed
+           // this.player.setTexture('shootingRight');
+
 
             if (this.facingLeft) {
                 this.player.setTexture('player'); // Change back to player sprite
@@ -175,6 +181,7 @@ this.physics.add.collider(this.player, this.block7);
         // Vertical movement
         if ((this.cursors.up.isDown || this.cursors.s.isDown) && spacePressed) {
             this.player.setVelocityY(-1000); // Move up when up arrow/S and space are pressed together
+            //this.player.setTexture('shootingDown');
         } else if (this.cursors.down.isDown) {
             this.player.setVelocityY(300); // Move down when down arrow is pressed
         }
