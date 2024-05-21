@@ -10,8 +10,8 @@ class PlayScene extends Phaser.Scene {
         // Load the player/police man sprites here
         this.load.image('player', '../Assets/player_right.png');
         this.load.image('player2', '../Assets/player_left.png');
-        this.load.image('shootingLeft', '../Assets/GuyLShoot.png');
-        this.load.image('shootingRight', '../Assets/GuyRShoot.png');
+        this.load.image('shootleft', '../Assets/GuyLShoot.png');
+        this.load.image('shootright', '../Assets/GuyRShoot.png');
         this.load.image('shootingDown', '../Assets/GuyDShoot.png');
         this.load.image('policeRight', '../Assets/Police.png');
         this.load.image('policeLeft', '../Assets/PoliceL.png');
@@ -214,7 +214,7 @@ this.block25.scaleY = 0.109;
 this.block25.refreshBody();
 this.physics.add.collider(this.player, this.block25);
 
-this.block26 = this.physics.add.staticSprite(50, -1200, 'block');
+this.block26 = this.physics.add.staticSprite(50, -1150, 'block');
 this.block26.displayWidth = 200; // Wider than the first block
 this.block26.scaleY = 0.209;
 this.block26.refreshBody();
@@ -300,20 +300,22 @@ this.physics.add.collider(this.player, this.block26);
         if ((this.cursors.left.isDown || this.cursors.a.isDown) && spacePressed) {
             this.player.setVelocityX(600);
             this.player.setVelocityY(1000);  // Move left when left arrow and space are presseds
-           // this.player.setTexture('shootingLeft');
+            this.player.setTexture('shootleft'); 
 
             if (!this.facingLeft) {
-                this.player.setTexture('player2'); // Change to block sprite
+
+                //this.player.setTexture('shootingLeft');
+                //this.player.setTexture('player2'); // Change to block sprite
                 this.facingLeft = true;
             }
         } else if ((this.cursors.right.isDown || this.cursors.d.isDown) && spacePressed) {
             this.player.setVelocityX(-600);
             this.player.setVelocityY(1000);  // Move right when right arrow and space are pressed
            // this.player.setTexture('shootingRight');
-
+           this.player.setTexture('shootright'); 
 
             if (this.facingLeft) {
-                this.player.setTexture('player'); // Change back to player sprite
+                //this.player.setTexture('player'); // Change back to player sprite
                 this.facingLeft = false;
             }
         } else {
@@ -334,6 +336,7 @@ this.physics.add.collider(this.player, this.block26);
         // Vertical movement
         if ((this.cursors.up.isDown || this.cursors.s.isDown) && spacePressed) {
             this.player.setVelocityY(-1000); // Move up when up arrow/S and space are pressed together
+            this.player.setTexture('shootingDown'); 
             //this.player.setTexture('shootingDown');
         } else if (this.cursors.down.isDown) {
             this.player.setVelocityY(300); // Move down when down arrow is pressed
