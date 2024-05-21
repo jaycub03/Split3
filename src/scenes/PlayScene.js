@@ -5,7 +5,7 @@ class PlayScene extends Phaser.Scene {
         this.cursors;
         this.block;
         this.bulletsRight;
-        this.bulletsLeft;
+        this.bulletsLeft; //
     }
 
     preload() {
@@ -126,7 +126,7 @@ class PlayScene extends Phaser.Scene {
         // Check if the player is shooting
         if (spacePressed) {
             // Play gunshot audio
-            this.playerGunshot.play();
+            this.playerGunshot.play();s
     
             // Horizontal movement
             if ((this.cursors.left.isDown || this.cursors.a.isDown)) {
