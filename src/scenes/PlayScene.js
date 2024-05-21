@@ -121,9 +121,16 @@ class PlayScene extends Phaser.Scene {
 
         // Reset player velocity (movement)
         this.player.setVelocityX(0);
-
-        // Check for spacebar press
+        
         var spacePressed = this.cursors.space.isDown;
+    
+        // Check if the player is shooting
+        if (spacePressed) {
+            // Play gunshot audio
+            this.playerGunshot.play();
+
+        }
+
 
         // Horizontal movement
         if ((this.cursors.left.isDown || this.cursors.a.isDown) && spacePressed) {
