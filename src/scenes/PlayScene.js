@@ -5,7 +5,8 @@ class PlayScene extends Phaser.Scene {
         this.cursors;
         this.block;
         this.bulletsRight;
-        this.bulletsLeft; //
+        this.bulletsLeft;
+        this.winBlock;
     }
 
     preload() {
@@ -26,12 +27,9 @@ class PlayScene extends Phaser.Scene {
         this.load.image("tiles", "../Assets/Prison_A5.png");
         this.load.tilemapTiledJSON("map", "../Assets/tilemap.json");
 
-        //load audio assets
+        // Load audio assets
         this.load.audio("gunshot", "../Assets/734059__dthetech__dd-shotgun-2b.wav");
         this.load.audio("loweredGunshot", "../Assets/734059__dthetech__dd-shotgun-2b.wav");
-
-
-
     }
 
     create() {
@@ -52,6 +50,12 @@ class PlayScene extends Phaser.Scene {
         // Create block sprites
         this.createBlocks();
 
+        // Create the win block
+        this.winBlock = this.physics.add.staticSprite(800, -4990, 'block');
+        this.winBlock.displayWidth = 60;
+        this.winBlock.scaleY = 0.028;
+        this.winBlock.refreshBody();
+
         // Player physics properties
         this.player.setBounce(0.2);
         this.player.setCollideWorldBounds(true);
@@ -61,8 +65,8 @@ class PlayScene extends Phaser.Scene {
 
         // Input Events
         this.cursors = this.input.keyboard.createCursorKeys();
-        this.cursors.a = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A); 
-        this.cursors.d = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D); 
+        this.cursors.a = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+        this.cursors.d = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
         this.cursors.s = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);  // Adding the S key
         this.cursors.space = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);  // Add space key
 
@@ -111,7 +115,10 @@ class PlayScene extends Phaser.Scene {
         this.physics.add.collider(this.player, this.bulletsRight, this.handlePlayerHit, null, this);
         this.physics.add.collider(this.player, this.bulletsLeft, this.handlePlayerHit, null, this);
 
-        //add player gunshot audio
+        // Add collision detection between player and win block
+        this.physics.add.collider(this.player, this.winBlock, this.handlePlayerWin, null, this);
+
+        // Add player gunshot audio
         this.playerGunshot = this.sound.add("loweredGunshot");
         this.playerGunshot.setVolume(0.5);
     }
@@ -119,40 +126,26 @@ class PlayScene extends Phaser.Scene {
     update() {
         // Reset player velocity (movement)
         this.player.setVelocityX(0);
-    
+
         // Check for spacebar press
         var spacePressed = this.cursors.space.isDown;
-    
-        // Check if the player is shooting
-        if (spacePressed) {
-            // Play gunshot audio
-            this.playerGunshot.play();s
-    
-            // Horizontal movement
-            if ((this.cursors.left.isDown || this.cursors.a.isDown)) {
-                this.player.setVelocityX(600);
-                this.player.setVelocityY(1000);  // Move left when left arrow and space are presseds
-                this.player.setTexture('shootleft');
-    
-                if (!this.facingLeft) {
-                    this.facingLeft = true;
-                }
-            } else if ((this.cursors.right.isDown || this.cursors.d.isDown)) {
-                this.player.setVelocityX(-600);
-                this.player.setVelocityY(1000);  // Move right when right arrow and space are pressed
-                this.player.setTexture('shootright');
-    
-                if (this.facingLeft) {
-                    this.facingLeft = false;
-                }
-            } else {
-                // Vertical movement
-                if (this.cursors.up.isDown || this.cursors.s.isDown) {
-                    this.player.setVelocityY(-1000); // Move up when up arrow/S and space are pressed together
-                    this.player.setTexture('shootingDown');
-                } else if (this.cursors.down.isDown) {
-                    this.player.setVelocityY(300); // Move down when down arrow is pressed
-                }
+
+        // Horizontal movement
+        if ((this.cursors.left.isDown || this.cursors.a.isDown) && spacePressed) {
+            this.player.setVelocityX(600);
+            this.player.setVelocityY(1000);  // Move left when left arrow and space are presseds
+            this.player.setTexture('shootleft');
+
+            if (!this.facingLeft) {
+                this.facingLeft = true;
+            }
+        } else if ((this.cursors.right.isDown || this.cursors.d.isDown) && spacePressed) {
+            this.player.setVelocityX(-600);
+            this.player.setVelocityY(1000);  // Move right when right arrow and space are pressed
+            this.player.setTexture('shootright');
+
+            if (this.facingLeft) {
+                this.facingLeft = false;
             }
         } else {
             // Set sprite direction without moving
@@ -168,21 +161,28 @@ class PlayScene extends Phaser.Scene {
                 }
             }
         }
-    
+
+        // Vertical movement
+        if ((this.cursors.up.isDown || this.cursors.s.isDown) && spacePressed) {
+            this.player.setVelocityY(-1000); // Move up when up arrow/S and space are pressed together
+            this.player.setTexture('shootingDown');
+        } else if (this.cursors.down.isDown) {
+            this.player.setVelocityY(300); // Move down when down arrow is pressed
+        }
+
         // Update bullets
         this.bulletsRight.children.each((bullet) => {
             if (bullet.active) {
                 bullet.update();
             }
         }, this);
-    
+
         this.bulletsLeft.children.each((bullet) => {
             if (bullet.active) {
                 bullet.update();
             }
         }, this);
     }
-    
 
     createBlocks() {
         const blockData = [
@@ -210,6 +210,7 @@ class PlayScene extends Phaser.Scene {
             { x: 940, y: -4830, width: 800, height: 0.028 },
             { x: 990, y: -4880, width: 800, height: 0.028 },
             { x: 1040, y: -4930, width: 800, height: 0.028 },
+            { x: 800, y: -4990, width: 60, height: 0.028 },
             { x: 600, y: -4525, width: 800, height: 0.088 },
             { x: 730, y: -1380, width: 800, height: 0.109 },
             { x: 50, y: -1150, width: 200, height: 0.209 },
@@ -238,14 +239,14 @@ class PlayScene extends Phaser.Scene {
 
         this.leftPolice = this.add.group();
         let leftPCoords = [
-            { x: 855, y: 280},
-            { x: 855, y: -580},
-            { x: 855, y: -1150},
-            { x: 855, y: -1640},
-            { x: 855, y: -2800},
+            { x: 855, y: 280 },
+            { x: 855, y: -580 },
+            { x: 855, y: -1150 },
+            { x: 855, y: -1640 },
+            { x: 855, y: -2800 },
             { x: 855, y: -3225 },
             { x: 855, y: -3650 },
-            { x: 855, y: -4075}
+            { x: 855, y: -4075 }
         ];
         leftPCoords.forEach(coord => {
             this.leftPolice.create(coord.x, coord.y, 'policeLeft');
@@ -254,10 +255,10 @@ class PlayScene extends Phaser.Scene {
 
     shootBullet() {
         const bulletOffsetY = 50; // Offset to make bullets appear lower
-    
+
         // Play gunshot audio
         this.sound.play('gunshot');
-    
+
         this.rightPolice.children.iterate((police) => {
             if (police.active) {
                 const bullet = this.bulletsRight.get(police.x, police.y + bulletOffsetY);
@@ -272,7 +273,7 @@ class PlayScene extends Phaser.Scene {
                 }
             }
         });
-    
+
         this.leftPolice.children.iterate((police) => {
             if (police.active) {
                 const bullet = this.bulletsLeft.get(police.x, police.y + bulletOffsetY);
@@ -291,7 +292,15 @@ class PlayScene extends Phaser.Scene {
 
     handlePlayerHit(player, bullet) {
         // Display pop-up message
-        alert("You've been shot, try again in another lifetime");
+        //alert("You've been shot, try again in another lifetime");
+
+        // Restart the game
+        //this.scene.restart();
+    }
+
+    handlePlayerWin(player, winBlock) {
+        // Display pop-up message
+        alert("Congrats, you won the game");
 
         // Restart the game
         this.scene.restart();
