@@ -70,32 +70,155 @@ class PlayScene extends Phaser.Scene {
 
 
         this.block5 = this.physics.add.staticSprite(590, -340, 'block');
-        this.block5.displayWidth = 700; // Wider than the first block
-        this.block5.scaleY = 0.11;
-        this.block5.refreshBody();
-        this.physics.add.collider(this.player, this.block5);
+this.block5.displayWidth = 700; // Wider than the first block
+this.block5.scaleY = 0.11;
+this.block5.refreshBody();
+this.physics.add.collider(this.player, this.block5);
 
 
-        this.block6 = this.physics.add.staticSprite(1120, -910, 'block');
-        this.block6.displayWidth = 700; // Wider than the first block
-        this.block6.scaleY = 0.109;
-        this.block6.refreshBody();
-        this.physics.add.collider(this.player, this.block6);
+this.block6 = this.physics.add.staticSprite(1120, -910, 'block');
+this.block6.displayWidth = 700; // Wider than the first block
+this.block6.scaleY = 0.109;
+this.block6.refreshBody();
+this.physics.add.collider(this.player, this.block6);
 
 
 
-        this.block6 = this.physics.add.staticSprite(130, -910, 'block');
-        this.block6.displayWidth = 900; // Wider than the first block
-        this.block6.scaleY = 0.109;
-        this.block6.refreshBody();
-        this.physics.add.collider(this.player, this.block6);
+this.block6 = this.physics.add.staticSprite(130, -910, 'block');
+this.block6.displayWidth = 900; // Wider than the first block
+this.block6.scaleY = 0.109;
+this.block6.refreshBody();
+this.physics.add.collider(this.player, this.block6);
 
 
-        this.block7 = this.physics.add.staticSprite(180, -1950, 'block');
-        this.block7.displayWidth = 900; // Wider than the first block
-        this.block7.scaleY = 0.09;
-        this.block7.refreshBody();
-        this.physics.add.collider(this.player, this.block7);
+this.block7 = this.physics.add.staticSprite(180, -1950, 'block');
+this.block7.displayWidth = 900; // Wider than the first block
+this.block7.scaleY = 0.09;
+this.block7.refreshBody();
+this.physics.add.collider(this.player, this.block7);
+
+
+this.block8 = this.physics.add.staticSprite(970, -1950, 'block');
+this.block8.displayWidth = 300; // Wider than the first block
+this.block8.scaleY = 0.09;
+this.block8.refreshBody();
+this.physics.add.collider(this.player, this.block8);
+
+
+this.block9 = this.physics.add.staticSprite(830, -2540, 'block');
+this.block9.displayWidth = 500; // Wider than the first block
+this.block9.scaleY = 0.106;
+this.block9.refreshBody();
+this.physics.add.collider(this.player, this.block9);
+
+
+this.block10 = this.physics.add.staticSprite(90, -2540, 'block');
+this.block10.displayWidth = 500; // Wider than the first block
+this.block10.scaleY = 0.106;
+this.block10.refreshBody();
+this.physics.add.collider(this.player, this.block10);
+
+
+this.block11 = this.physics.add.staticSprite(830, -2980, 'block');
+this.block11.displayWidth = 500; // Wider than the first block
+this.block11.scaleY = 0.106;
+this.block11.refreshBody();
+this.physics.add.collider(this.player, this.block11);
+
+this.block12 = this.physics.add.staticSprite(90, -2980, 'block');
+this.block12.displayWidth = 500; // Wider than the first block
+this.block12.scaleY = 0.107;
+this.block12.refreshBody();
+this.physics.add.collider(this.player, this.block12);
+
+this.block13 = this.physics.add.staticSprite(90, -3420, 'block');
+this.block13.displayWidth = 500; // Wider than the first block
+this.block13.scaleY = 0.107;
+this.block13.refreshBody();
+this.physics.add.collider(this.player, this.block13);
+
+this.block14 = this.physics.add.staticSprite(830, -3420, 'block');
+this.block14.displayWidth = 500; // Wider than the first block
+this.block14.scaleY = 0.106;
+this.block14.refreshBody();
+this.physics.add.collider(this.player, this.block14);
+
+
+this.block15 = this.physics.add.staticSprite(90, -3850, 'block');
+this.block15.displayWidth = 500; // Wider than the first block
+this.block15.scaleY = 0.106;
+this.block15.refreshBody();
+this.physics.add.collider(this.player, this.block15);
+
+this.block16 = this.physics.add.staticSprite(830, -3850, 'block');
+this.block16.displayWidth = 500; // Wider than the first block
+this.block16.scaleY = 0.106;
+this.block16.refreshBody();
+this.physics.add.collider(this.player, this.block16);
+
+
+this.block17 = this.physics.add.staticSprite(740, -4630, 'block');
+this.block17.displayWidth = 800; // Wider than the first block
+this.block17.scaleY = 0.028;
+this.block17.refreshBody();
+this.physics.add.collider(this.player, this.block17);
+
+this.block18 = this.physics.add.staticSprite(790, -4680, 'block');
+this.block18.displayWidth = 800; // Wider than the first block
+this.block18.scaleY = 0.028;
+this.block18.refreshBody();
+this.physics.add.collider(this.player, this.block18);
+
+
+this.block19 = this.physics.add.staticSprite(840, -4730, 'block');
+this.block19.displayWidth = 800; // Wider than the first block
+this.block19.scaleY = 0.028;
+this.block19.refreshBody();
+this.physics.add.collider(this.player, this.block19);
+
+this.block20 = this.physics.add.staticSprite(890, -4780, 'block');
+this.block20.displayWidth = 800; // Wider than the first block
+this.block20.scaleY = 0.028;
+this.block20.refreshBody();
+this.physics.add.collider(this.player, this.block20);
+
+this.block21 = this.physics.add.staticSprite(940, -4830, 'block');
+this.block21.displayWidth = 800; // Wider than the first block
+this.block21.scaleY = 0.028;
+this.block21.refreshBody();
+this.physics.add.collider(this.player, this.block21);
+
+this.block22 = this.physics.add.staticSprite(990, -4880, 'block');
+this.block22.displayWidth = 800; // Wider than the first block
+this.block22.scaleY = 0.028;
+this.block22.refreshBody();
+this.physics.add.collider(this.player, this.block22);
+
+this.block23 = this.physics.add.staticSprite(1040, -4930, 'block');
+this.block23.displayWidth = 800; // Wider than the first block
+this.block23.scaleY = 0.028;
+this.block23.refreshBody();
+this.physics.add.collider(this.player, this.block23);
+
+
+this.block24 = this.physics.add.staticSprite(600, -4525, 'block');
+this.block24.displayWidth = 800; // Wider than the first block
+this.block24.scaleY = 0.088;
+this.block24.refreshBody();
+this.physics.add.collider(this.player, this.block24);
+
+
+this.block25 = this.physics.add.staticSprite(730, -1380, 'block');
+this.block25.displayWidth = 800; // Wider than the first block
+this.block25.scaleY = 0.109;
+this.block25.refreshBody();
+this.physics.add.collider(this.player, this.block25);
+
+this.block26 = this.physics.add.staticSprite(50, -1200, 'block');
+this.block26.displayWidth = 200; // Wider than the first block
+this.block26.scaleY = 0.209;
+this.block26.refreshBody();
+this.physics.add.collider(this.player, this.block26);
 
 
         // Player physics properties
