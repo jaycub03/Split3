@@ -25,6 +25,13 @@ class PlayScene extends Phaser.Scene {
         this.load.image('block', '../Assets/block.png');
         this.load.image("tiles", "../Assets/Prison_A5.png");
         this.load.tilemapTiledJSON("map", "../Assets/tilemap.json");
+
+        //load audio assets
+        this.load.audio("gunshot", "../Assets/734059__dthetech__dd-shotgun-2b.wav");
+        this.load.audio("loweredGunshot", "../Assets/734059__dthetech__dd-shotgun-2b.wav");
+
+
+
     }
 
     create() {
@@ -103,31 +110,49 @@ class PlayScene extends Phaser.Scene {
         // Add collision detection between player and bullets
         this.physics.add.collider(this.player, this.bulletsRight, this.handlePlayerHit, null, this);
         this.physics.add.collider(this.player, this.bulletsLeft, this.handlePlayerHit, null, this);
+
+        //add player gunshot audio
+        this.playerGunshot = this.sound.add("loweredGunshot");
+        this.playerGunshot.setVolume(0.5);
     }
 
     update() {
         // Reset player velocity (movement)
         this.player.setVelocityX(0);
-
+    
         // Check for spacebar press
         var spacePressed = this.cursors.space.isDown;
-
-        // Horizontal movement
-        if ((this.cursors.left.isDown || this.cursors.a.isDown) && spacePressed) {
-            this.player.setVelocityX(600);
-            this.player.setVelocityY(1000);  // Move left when left arrow and space are presseds
-            this.player.setTexture('shootleft'); 
-
-            if (!this.facingLeft) {
-                this.facingLeft = true;
-            }
-        } else if ((this.cursors.right.isDown || this.cursors.d.isDown) && spacePressed) {
-            this.player.setVelocityX(-600);
-            this.player.setVelocityY(1000);  // Move right when right arrow and space are pressed
-            this.player.setTexture('shootright'); 
-
-            if (this.facingLeft) {
-                this.facingLeft = false;
+    
+        // Check if the player is shooting
+        if (spacePressed) {
+            // Play gunshot audio
+            this.playerGunshot.play();
+    
+            // Horizontal movement
+            if ((this.cursors.left.isDown || this.cursors.a.isDown)) {
+                this.player.setVelocityX(600);
+                this.player.setVelocityY(1000);  // Move left when left arrow and space are presseds
+                this.player.setTexture('shootleft');
+    
+                if (!this.facingLeft) {
+                    this.facingLeft = true;
+                }
+            } else if ((this.cursors.right.isDown || this.cursors.d.isDown)) {
+                this.player.setVelocityX(-600);
+                this.player.setVelocityY(1000);  // Move right when right arrow and space are pressed
+                this.player.setTexture('shootright');
+    
+                if (this.facingLeft) {
+                    this.facingLeft = false;
+                }
+            } else {
+                // Vertical movement
+                if (this.cursors.up.isDown || this.cursors.s.isDown) {
+                    this.player.setVelocityY(-1000); // Move up when up arrow/S and space are pressed together
+                    this.player.setTexture('shootingDown');
+                } else if (this.cursors.down.isDown) {
+                    this.player.setVelocityY(300); // Move down when down arrow is pressed
+                }
             }
         } else {
             // Set sprite direction without moving
@@ -143,28 +168,21 @@ class PlayScene extends Phaser.Scene {
                 }
             }
         }
-
-        // Vertical movement
-        if ((this.cursors.up.isDown || this.cursors.s.isDown) && spacePressed) {
-            this.player.setVelocityY(-1000); // Move up when up arrow/S and space are pressed together
-            this.player.setTexture('shootingDown'); 
-        } else if (this.cursors.down.isDown) {
-            this.player.setVelocityY(300); // Move down when down arrow is pressed
-        }
-
+    
         // Update bullets
         this.bulletsRight.children.each((bullet) => {
             if (bullet.active) {
                 bullet.update();
             }
         }, this);
-
+    
         this.bulletsLeft.children.each((bullet) => {
             if (bullet.active) {
                 bullet.update();
             }
         }, this);
     }
+    
 
     createBlocks() {
         const blockData = [
@@ -236,7 +254,10 @@ class PlayScene extends Phaser.Scene {
 
     shootBullet() {
         const bulletOffsetY = 50; // Offset to make bullets appear lower
-
+    
+        // Play gunshot audio
+        this.sound.play('gunshot');
+    
         this.rightPolice.children.iterate((police) => {
             if (police.active) {
                 const bullet = this.bulletsRight.get(police.x, police.y + bulletOffsetY);
@@ -251,7 +272,7 @@ class PlayScene extends Phaser.Scene {
                 }
             }
         });
-
+    
         this.leftPolice.children.iterate((police) => {
             if (police.active) {
                 const bullet = this.bulletsLeft.get(police.x, police.y + bulletOffsetY);
