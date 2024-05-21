@@ -94,7 +94,7 @@ class PlayScene extends Phaser.Scene {
 
         // Set interval for police shooting bullets
         this.time.addEvent({
-            delay: 1000, // Time interval in milliseconds
+            delay: 3000, // Time interval in milliseconds
             callback: this.shootBullet,
             callbackScope: this,
             loop: true
