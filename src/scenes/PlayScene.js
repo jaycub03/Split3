@@ -53,7 +53,7 @@ class PlayScene extends Phaser.Scene {
         // Create the win block
         this.winBlock = this.physics.add.staticSprite(800, -4990, 'block');
         this.winBlock.displayWidth = 60;
-        this.winBlock.scaleY = 0.028;
+        this.winBlock.scaleY = 0.28;
         this.winBlock.refreshBody();
 
         // Player physics properties
