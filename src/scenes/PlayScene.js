@@ -286,10 +286,10 @@ class PlayScene extends Phaser.Scene {
 
     handlePlayerHit(player, bullet) {
         // Display pop-up message
-        //alert("You've been shot, try again in another lifetime");
+        alert("You've been shot, try again in another lifetime");
 
         // Restart the game
-        //this.scene.restart();
+        this.scene.restart();
     }
 
     handlePlayerWin() {
