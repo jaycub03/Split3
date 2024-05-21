@@ -7,12 +7,15 @@ class PlayScene extends Phaser.Scene {
     }
 
     preload() {
-        // Load the player sprite here
+        // Load the player/police man sprites here
         this.load.image('player', '../Assets/player_right.png');
         this.load.image('player2', '../Assets/player_left.png');
         this.load.image('shootingLeft', '../Assets/GuyLShoot.png');
         this.load.image('shootingRight', '../Assets/GuyRShoot.png');
         this.load.image('shootingDown', '../Assets/GuyDShoot.png');
+        this.load.image('policeRight', '../Assets/Police.png');
+        this.load.image('policeLeft', '../Assets/PoliceL.png');
+
         // Load the block sprite
         this.load.image('block', '../Assets/block.png');
         this.load.image("tiles", "../Assets/Prison_A5.png");
@@ -34,8 +37,8 @@ class PlayScene extends Phaser.Scene {
         // Create the player sprite
         this.player = this.physics.add.sprite(400, 300, 'player');
         // Adjust the player's hitbox size and offset
-    this.player.body.setSize(120, 200); // Set the size (width, height) of the hitbox
-    this.player.body.setOffset(25, 10); // Set the offset (x, y) of the hitbox
+        this.player.body.setSize(120, 200); // Set the size (width, height) of the hitbox
+        this.player.body.setOffset(25, 10); // Set the offset (x, y) of the hitbox
 
         // Create the first block sprite and scale it down to have a width of 100
         this.block = this.physics.add.staticSprite(500, 670, 'block');
@@ -67,40 +70,32 @@ class PlayScene extends Phaser.Scene {
 
 
         this.block5 = this.physics.add.staticSprite(590, -340, 'block');
-this.block5.displayWidth = 700; // Wider than the first block
-this.block5.scaleY = 0.11;
-this.block5.refreshBody();
-this.physics.add.collider(this.player, this.block5);
+        this.block5.displayWidth = 700; // Wider than the first block
+        this.block5.scaleY = 0.11;
+        this.block5.refreshBody();
+        this.physics.add.collider(this.player, this.block5);
 
 
-this.block6 = this.physics.add.staticSprite(1120, -910, 'block');
-this.block6.displayWidth = 700; // Wider than the first block
-this.block6.scaleY = 0.109;
-this.block6.refreshBody();
-this.physics.add.collider(this.player, this.block6);
-
-
-
-this.block6 = this.physics.add.staticSprite(130, -910, 'block');
-this.block6.displayWidth = 900; // Wider than the first block
-this.block6.scaleY = 0.109;
-this.block6.refreshBody();
-this.physics.add.collider(this.player, this.block6);
-
-
-this.block7 = this.physics.add.staticSprite(180, -1950, 'block');
-this.block7.displayWidth = 900; // Wider than the first block
-this.block7.scaleY = 0.09;
-this.block7.refreshBody();
-this.physics.add.collider(this.player, this.block7);
+        this.block6 = this.physics.add.staticSprite(1120, -910, 'block');
+        this.block6.displayWidth = 700; // Wider than the first block
+        this.block6.scaleY = 0.109;
+        this.block6.refreshBody();
+        this.physics.add.collider(this.player, this.block6);
 
 
 
+        this.block6 = this.physics.add.staticSprite(130, -910, 'block');
+        this.block6.displayWidth = 900; // Wider than the first block
+        this.block6.scaleY = 0.109;
+        this.block6.refreshBody();
+        this.physics.add.collider(this.player, this.block6);
 
 
-
-
-
+        this.block7 = this.physics.add.staticSprite(180, -1950, 'block');
+        this.block7.displayWidth = 900; // Wider than the first block
+        this.block7.scaleY = 0.09;
+        this.block7.refreshBody();
+        this.physics.add.collider(this.player, this.block7);
 
 
         // Player physics properties
@@ -134,6 +129,41 @@ this.physics.add.collider(this.player, this.block7);
             collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
             faceColor: new Phaser.Display.Color(40, 39, 37, 255) // Color of colliding face edges
         });
+
+        //add police man sprites
+        this.rightPolice = this.add.group();
+
+        let rightPCoords = [
+            { x: 200, y: -1150},
+            { x: 50, y: -2175 },
+            { x: 50, y: -2800 },
+            { x: 50, y: -3225 },
+            { x: 50, y: -3650 }
+        ];
+
+        rightPCoords.forEach(coord => {
+            this.rightPolice.create(coord.x, coord.y, 'policeRight');
+        });
+
+        this.leftPolice = this.add.group();
+
+        let leftPCoords = [
+            { x: 855, y: 280},
+            { x: 855, y: -580},
+            { x: 855, y: -1150},
+            { x: 855, y: -1640},
+            { x: 855, y: -2800},
+            { x: 855, y: -3225 },
+            { x: 855, y: -3650 },
+            { x: 855, y: -4075}
+
+        ]
+
+        leftPCoords.forEach(coord => {
+            this.leftPolice.create(coord.x, coord.y, 'policeLeft');
+        });
+        
+
     }
 
     update() {
