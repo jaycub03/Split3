@@ -232,9 +232,11 @@ class PlayScene extends Phaser.Scene {
     }
 
     shootBullet() {
+        const bulletOffsetY = 50; // Offset to make bullets appear lower
+
         this.rightPolice.children.iterate((police) => {
             if (police.active) {
-                const bullet = this.bulletsRight.get(police.x, police.y);
+                const bullet = this.bulletsRight.get(police.x, police.y + bulletOffsetY);
                 if (bullet) {
                     bullet.setActive(true);
                     bullet.setVisible(true);
@@ -249,7 +251,7 @@ class PlayScene extends Phaser.Scene {
 
         this.leftPolice.children.iterate((police) => {
             if (police.active) {
-                const bullet = this.bulletsLeft.get(police.x, police.y);
+                const bullet = this.bulletsLeft.get(police.x, police.y + bulletOffsetY);
                 if (bullet) {
                     bullet.setActive(true);
                     bullet.setVisible(true);
